@@ -1,4 +1,6 @@
 const axios = require('axios')
+const NodeCache = require( "node-cache" );
+const myCache = new NodeCache();
 
 const productCategories = ['jackets', 'shirts', 'accessories']
 
@@ -63,15 +65,21 @@ const mapAvailabilityIntoProducts = (productsDataByCategory, availabilityDataByM
   return productsDataWithAvailabilityField
 }
 
+const cacheTheData = (productsByCategoryWithAvailability) => {
+  for (let [key, value] of Object.entries(productsByCategoryWithAvailability)) {
+    myCache.set(key, value)
+  }
+}
+
 const startFetchingData = async () => {
   try {
     const productsDataByCategory = await fetchProductsData()
     const manufacturerNames = figureOutManufacturerNames(productsDataByCategory)
     const availabilityDataByManufacturer = await getAvailabilityByManufacturer(manufacturerNames)
 
-    const finalProducts = mapAvailabilityIntoProducts(productsDataByCategory, availabilityDataByManufacturer)
-    //console.log(finalProducts.accessories[333])
-    return finalProducts
+    const productsByCategoryWithAvailability = mapAvailabilityIntoProducts(productsDataByCategory, availabilityDataByManufacturer)
+    cacheTheData(productsByCategoryWithAvailability)
+    return new Promise((resolve) => resolve())
   } catch (e) {
     console.error(e)
     return new Promise((resolve, reject) => reject(err))
@@ -80,5 +88,5 @@ const startFetchingData = async () => {
 
 
 module.exports = {
-  startFetchingData
+  startFetchingData, myCache
 }
