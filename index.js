@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const { startFetchingData, myCache } = require('./dataService/fetchData')
+const { fetchData, myCache } = require('./dataService/fetchData')
 
 const http = require('http')
 const port = process.env.PORT || 3001
@@ -23,7 +23,7 @@ app.get('/accessories', (req, res) => {
 })
 
 startServer = async () => {
-  await startFetchingData()
+  await fetchData()
   server.listen({ port }, () => {
     console.log(`Server running on port ${port}`)
   })

@@ -71,7 +71,10 @@ const cacheTheData = (productsByCategoryWithAvailability) => {
   }
 }
 
-const startFetchingData = async () => {
+const fetchData = async () => {
+  setTimeout(() => {
+    fetchData()
+  }, 300000)
   try {
     const productsDataByCategory = await fetchProductsData()
     const manufacturerNames = figureOutManufacturerNames(productsDataByCategory)
@@ -88,5 +91,5 @@ const startFetchingData = async () => {
 
 
 module.exports = {
-  startFetchingData, myCache
+  fetchData, myCache
 }
