@@ -66,6 +66,7 @@ const mapAvailabilityIntoProducts = (productsDataByCategory, availabilityDataByM
 }
 
 const cacheTheData = (productsByCategoryWithAvailability) => {
+  myCache.set("products", productsByCategoryWithAvailability)
   for (let [key, value] of Object.entries(productsByCategoryWithAvailability)) {
     myCache.set(key, value)
   }

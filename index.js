@@ -1,5 +1,9 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
+ 
+app.use(cors())
+ 
 const { fetchData, myCache } = require('./dataService/fetchData')
 
 const http = require('http')
@@ -11,15 +15,19 @@ app.get('/', (req, res) => {
 })
 
 app.get('/jackets', (req, res) => {
-  res.send(myCache.get("jackets"))
+  res.send(myCache.get('jackets'))
 })
 
 app.get('/shirts', (req, res) => {
-  res.send(myCache.get("shirts"))
+  res.send(myCache.get('shirts'))
 })
 
 app.get('/accessories', (req, res) => {
-  res.send(myCache.get("accessories"))
+  res.send(myCache.get('accessories'))
+})
+
+app.get('/products', (req, res) => {
+  res.send(myCache.get('products'))
 })
 
 startServer = async () => {

@@ -1,11 +1,20 @@
 import React from 'react'
+import useSWR from "swr"
+import { fetchProductsData } from "../services/productsService"
 
 const ShirtsPage = () => {
-    return (
-        <div>
+    const {data: productsData} = useSWR("/products", fetchProductsData)
+    if (!productsData) return <div>loading...</div>
 
-      Shirts
+    return (
+      <div>
+        <h1>Shirts</h1>
+        <div>
+            {productsData && productsData.shirts.map(item => {
+                return <p key={item.id}>{item.name}</p>
+            })}
         </div>
+      </div>
     )
 }
 
