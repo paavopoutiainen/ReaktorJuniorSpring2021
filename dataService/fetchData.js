@@ -8,9 +8,9 @@ const productCategories = ['jackets', 'shirts', 'accessories']
 /*
   returns
   {
-    jackets: [],
-    shirts: [],
-    accessories: []
+    jackets: [{}, ...],
+    shirts: [{}, ...],
+    accessories: [{}, ...]
   }
 */
 const fetchProductsData = async () => {
@@ -50,8 +50,27 @@ const getAvailabilityByManufacturer = async (manufacturerNames) => {
 
 const getAvailabilityFieldOfProduct = (productId, availabilityOfManufacturer) => {
   const availabilityInfoStringOfProduct = availabilityOfManufacturer.find((row) => row.id.toLowerCase() === productId).DATAPAYLOAD
-  const availabilitySubstringOfProduct = availabilityInfoStringOfProduct.substring(31, availabilityInfoStringOfProduct.length - 31)
-  return availabilitySubstringOfProduct
+  let availabilityValue = availabilityInfoStringOfProduct.substring(31, availabilityInfoStringOfProduct.length - 31)
+  switch(availabilityValue) {
+    case "INSTOCK":
+      availabilityValue = "IN STOCK"
+      break
+    case "LESSTHAN10":
+      availabilityValue = "LESS THAN 10"
+      break
+    case "OUTOFSTOCK":
+      availabilityValue = "OUT OF STOCK"
+      break
+    default:
+  }
+  return availabilityValue
+}
+
+const prettifyProduct = (product) => {
+  let copy = JSON.parse(JSON.stringify(product))
+  copy.manufacturer = product.manufacturer.charAt(0).toUpperCase() + product.manufacturer.slice(1)
+  copy.color = product.color.map((color) => color.charAt(0).toUpperCase() + color.slice(1)).join(", ")
+  return copy
 }
 
 const mapAvailabilityIntoProducts = (productsDataByCategory, availabilityDataByManufacturer) => {
@@ -59,8 +78,9 @@ const mapAvailabilityIntoProducts = (productsDataByCategory, availabilityDataByM
   for (let [key, value] of Object.entries(productsDataByCategory)) {
     const productsOfCertainCategoryWithAvailability = value.map((product) => {
       const availabilityOfProduct = getAvailabilityFieldOfProduct(product.id, availabilityDataByManufacturer[product.manufacturer])
+      const prettifiedProduct = prettifyProduct(product)
       
-      return { ...product, availability: availabilityOfProduct }
+      return { ...prettifiedProduct, availability: availabilityOfProduct }
     })
     productsDataWithAvailabilityField[key] = productsOfCertainCategoryWithAvailability
   }
