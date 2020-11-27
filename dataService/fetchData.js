@@ -49,18 +49,20 @@ const getAvailabilityByManufacturer = async (manufacturerNames) => {
 }
 
 const getAvailabilityFieldOfProduct = (productId, availabilityOfManufacturer) => {
-  const availabilityOfProduct = availabilityOfManufacturer.find((row) => row.id.toLowerCase() === productId).DATAPAYLOAD
-  return availabilityOfProduct
+  const availabilityInfoStringOfProduct = availabilityOfManufacturer.find((row) => row.id.toLowerCase() === productId).DATAPAYLOAD
+  const availabilitySubstringOfProduct = availabilityInfoStringOfProduct.substring(31, availabilityInfoStringOfProduct.length - 31)
+  return availabilitySubstringOfProduct
 }
 
 const mapAvailabilityIntoProducts = (productsDataByCategory, availabilityDataByManufacturer) => {
   let productsDataWithAvailabilityField = {}
   for (let [key, value] of Object.entries(productsDataByCategory)) {
-    const newValue = value.map((product) => {
+    const productsOfCertainCategoryWithAvailability = value.map((product) => {
       const availabilityOfProduct = getAvailabilityFieldOfProduct(product.id, availabilityDataByManufacturer[product.manufacturer])
+      
       return { ...product, availability: availabilityOfProduct }
     })
-    productsDataWithAvailabilityField[key] = newValue
+    productsDataWithAvailabilityField[key] = productsOfCertainCategoryWithAvailability
   }
   return productsDataWithAvailabilityField
 }
