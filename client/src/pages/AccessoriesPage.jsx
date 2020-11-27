@@ -1,6 +1,7 @@
 import React from 'react'
 import useSWR from "swr"
 import { fetchProductsData } from "../services/productsService"
+import ProductTable from "../components/ProductTable"
 
 const AccessoriesPage = ({data}) => {
     const {data: productsData} = useSWR("/products", fetchProductsData)
@@ -8,10 +9,8 @@ const AccessoriesPage = ({data}) => {
 
     return (
         <div>
-          <h1>Accessories</h1>
-            {productsData && productsData.accessories.map(item => {
-                return <p key={item.id}>{item.name}</p>
-            })}
+            <h1>Accessories</h1>
+            {productsData &&  <ProductTable data={productsData.accessories}/>}
         </div>
     )
 }
