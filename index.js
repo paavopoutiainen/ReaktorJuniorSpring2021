@@ -12,6 +12,7 @@ const server = http.createServer(app)
 
 app.use(express.static(path.join(__dirname, '/build')))
 app.get('/', (req, res) => {
+  console.log("hello")
     res.sendFile(__dirname + '/build/index.html')
 })
 
