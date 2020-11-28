@@ -4,9 +4,8 @@ const myCache = new NodeCache();
 
 const productCategories = ['jackets', 'shirts', 'accessories']
 
-
 /*
-  returns
+  fetchProductsData returns
   {
     jackets: [{}, ...],
     shirts: [{}, ...],
@@ -30,22 +29,36 @@ const fetchProductsData = async () => {
 
 const figureOutManufacturerNames = (productsData) => {
   const productsDataAsArray = Object.values(productsData)
-  const allProductManufacturers = Array.from(new Set(productsDataAsArray.flat().map((product) => product.manufacturer)))
+  const allProductManufacturers = [...new Set(productsDataAsArray.flat().map((product) => product.manufacturer))]
   return allProductManufacturers
+}
+
+const retry = async (functionToTry, numberOfRetries) => {
+  let lastError
+  for (let i = 0; i < numberOfRetries; i++) {
+    try {
+      console.log("Trying to fetch manufacturers", i)
+      const data = await functionToTry()
+      console.log("Fetch succeeded")
+      return data
+    } catch (e) {
+      console.log("[] issue faced and is dealt with")
+      lastError = e
+    }
+  }
+  return lastError
 }
 
 const getAvailabilityByManufacturer = async (manufacturerNames) => {
   let availabilityDataByManufacturer = {}
-  try {
     await Promise.all(manufacturerNames.map( async (manufacturer) => {
       const availabilityData = await axios.get(`https://bad-api-assignment.reaktor.com/availability/${manufacturer}`)
+      if (availabilityData.data.response === "[]") {
+        throw new Error("[] issue")
+      }
       availabilityDataByManufacturer[manufacturer] = availabilityData.data.response
     }))
     return availabilityDataByManufacturer
-  } catch(e) {
-    console.error(e)
-  }
-  
 }
 
 const getAvailabilityFieldOfProduct = (productId, availabilityOfManufacturer) => {
@@ -89,19 +102,23 @@ const mapAvailabilityIntoProducts = (productsDataByCategory, availabilityDataByM
 
 const cacheTheData = (productsByCategoryWithAvailability) => {
   myCache.set("products", productsByCategoryWithAvailability)
+  /*
   for (let [key, value] of Object.entries(productsByCategoryWithAvailability)) {
     myCache.set(key, value)
   }
+  */
 }
 
-const fetchData = async () => {
+const startFetchingData = async () => {
   setTimeout(() => {
-    fetchData()
+    startFetchingData()
   }, 300000)
   try {
     const productsDataByCategory = await fetchProductsData()
     const manufacturerNames = figureOutManufacturerNames(productsDataByCategory)
-    const availabilityDataByManufacturer = await getAvailabilityByManufacturer(manufacturerNames)
+
+    const getAvailabilityDataSafely = () => retry(() => getAvailabilityByManufacturer(manufacturerNames), 10)
+    const availabilityDataByManufacturer = await getAvailabilityDataSafely()
 
     const productsByCategoryWithAvailability = mapAvailabilityIntoProducts(productsDataByCategory, availabilityDataByManufacturer)
     cacheTheData(productsByCategoryWithAvailability)
@@ -114,5 +131,5 @@ const fetchData = async () => {
 
 
 module.exports = {
-  fetchData, myCache
+  startFetchingData, myCache
 }

@@ -4,7 +4,7 @@ const app = express()
  
 app.use(cors())
  
-const { fetchData, myCache } = require('./dataService/fetchData')
+const { startFetchingData, myCache } = require('./dataService/fetchData')
 
 const http = require('http')
 const port = process.env.PORT || 3001
@@ -31,7 +31,7 @@ app.get('/products', (req, res) => {
 })
 
 startServer = async () => {
-  await fetchData()
+  await startFetchingData()
   server.listen({ port }, () => {
     console.log(`Server running on port ${port}`)
   })
