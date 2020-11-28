@@ -15,7 +15,7 @@ app.get('/*', (req, res) => {
   console.log("hello")
     res.sendFile(__dirname + '/build/index.html')
 })
-
+/*
 app.get('/jackets', (req, res) => {
   res.send(myCache.get('jackets'))
 })
@@ -26,7 +26,7 @@ app.get('/shirts', (req, res) => {
 
 app.get('/accessories', (req, res) => {
   res.send(myCache.get('accessories'))
-})
+})*/
 
 app.get('/products', (req, res) => {
   res.send(myCache.get('products'))
