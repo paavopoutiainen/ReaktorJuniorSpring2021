@@ -15,10 +15,6 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/build/index.html')
 })
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
 app.get('/jackets', (req, res) => {
   res.send(myCache.get('jackets'))
 })
