@@ -9,7 +9,6 @@ const JacketsPage = () => {
 
     return (
         <div>
-          <h1>Jackets</h1>
           {productsData &&  <ProductTable data={productsData.jackets}/>}
         </div>
     )

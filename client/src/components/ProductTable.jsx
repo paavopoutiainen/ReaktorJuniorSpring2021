@@ -51,7 +51,7 @@ const ProductTable = ({ data }) => {
 
   return (
       <>
-        <TableContainer style={{overflow: "initial"}}>
+        <TableContainer style={{ height: '87vh'}}>
           <Table stickyHeader>
             <TableHeader columnNames={columns.map((column) => column.name)}/>
             <TableBody>
