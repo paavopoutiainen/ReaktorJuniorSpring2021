@@ -11,25 +11,14 @@ const port = process.env.PORT || 3001
 const server = http.createServer(app)
 
 app.use(express.static(path.join(__dirname, '/build')))
-app.get('/*', (req, res) => {
-  console.log("hello")
-    res.sendFile(__dirname + '/build/index.html')
-})
-/*
-app.get('/jackets', (req, res) => {
-  res.send(myCache.get('jackets'))
-})
-
-app.get('/shirts', (req, res) => {
-  res.send(myCache.get('shirts'))
-})
-
-app.get('/accessories', (req, res) => {
-  res.send(myCache.get('accessories'))
-})*/
 
 app.get('/products', (req, res) => {
   res.send(myCache.get('products'))
+})
+
+app.get('/*', (req, res) => {
+  console.log("hello")
+    res.sendFile(__dirname + '/build/index.html')
 })
 
 startServer = async () => {
