@@ -38,8 +38,8 @@ const columns = [
 
 const ProductTable = ({ data }) => {
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
-  
+  const [rowsPerPage, setRowsPerPage] = useState(50)
+
   const handleChangePage = (event, newPage) => {
       setPage(newPage)
   }
@@ -51,8 +51,8 @@ const ProductTable = ({ data }) => {
 
   return (
       <>
-        <TableContainer>
-          <Table>
+        <TableContainer style={{overflow: "initial"}}>
+          <Table stickyHeader>
             <TableHeader columnNames={columns.map((column) => column.name)}/>
             <TableBody>
               {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((productObject) => {
@@ -82,6 +82,7 @@ const ProductTable = ({ data }) => {
           rowsPerPage={rowsPerPage}
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
+          style={{position: "fixed", width: "100%", bottom: 0, backgroundColor: "white", borderTop: "solid gray 1px", zIndex: 1}}
         />
       </>
   )
