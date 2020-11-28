@@ -1,5 +1,5 @@
 import axios from "axios"
-const baseUrl = "http://localhost:3001/products"
+const baseUrl = "https://evening-ridge-26628.herokuapp.com/products"
 
 export const fetchProductsData = async () => {
     const response = await axios.get(baseUrl)

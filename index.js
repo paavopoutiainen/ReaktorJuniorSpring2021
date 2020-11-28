@@ -12,10 +12,6 @@ const server = http.createServer(app)
 
 app.use(express.static('build'))
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
 app.get('/jackets', (req, res) => {
   res.send(myCache.get('jackets'))
 })
