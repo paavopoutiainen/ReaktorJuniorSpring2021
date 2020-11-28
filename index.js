@@ -10,7 +10,7 @@ const http = require('http')
 const port = process.env.PORT || 3001
 const server = http.createServer(app)
 
-app.use(express.static('build'))
+app.use(express.static('./build'))
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
