@@ -8,7 +8,7 @@ const LandingPage = () => {
             </div>
             <div>
                 <h1>
-              Welcome!
+                    Welcome to the warehouse app!
                 </h1>
             </div>
         </div>
