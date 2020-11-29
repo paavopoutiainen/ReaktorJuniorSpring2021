@@ -10,7 +10,7 @@ function App() {
 
   return (
     <div className="App">
-      <SWRConfig value={{ dedupingInterval: 300000, fetcher: fetchProductsData }}>
+      <SWRConfig value={{ dedupingInterval: 150000, refreshInterval: 300000, fetcher: fetchProductsData }}>
         <Router>
             <NavigationHeader />
             <Routes/>
