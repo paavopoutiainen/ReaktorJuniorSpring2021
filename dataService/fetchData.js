@@ -1,6 +1,7 @@
 const axios = require('axios')
-const NodeCache = require( "node-cache" );
-const myCache = new NodeCache();
+const NodeCache = require( "node-cache" )
+const socket = require('../socketio.js')
+const myCache = new NodeCache()
 
 const productCategories = ['jackets', 'shirts', 'accessories']
 
@@ -49,6 +50,15 @@ const retry = async (functionToTry, numberOfRetries) => {
   return lastError
 }
 
+/*
+  getAvailabilityByManufacturer returns
+  {
+    manufacturerName: [{}, ...],
+    manufacturerName: [{}, ...],
+    manufacturerName: [{}, ...]
+    ...
+  }
+*/
 const getAvailabilityByManufacturer = async (manufacturerNames) => {
   let availabilityDataByManufacturer = {}
     await Promise.all(manufacturerNames.map( async (manufacturer) => {
@@ -62,8 +72,8 @@ const getAvailabilityByManufacturer = async (manufacturerNames) => {
 }
 
 const getAvailabilityFieldOfProduct = (productId, availabilityOfManufacturer) => {
-  const availabilityInfoStringOfProduct = availabilityOfManufacturer.find((row) => row.id.toLowerCase() === productId).DATAPAYLOAD
-  let availabilityValue = availabilityInfoStringOfProduct.substring(31, availabilityInfoStringOfProduct.length - 31)
+  const availabilityOfProduct = availabilityOfManufacturer.find((row) => row.id.toLowerCase() === productId)
+  let availabilityValue = availabilityOfProduct.DATAPAYLOAD.substring(31, availabilityOfProduct.DATAPAYLOAD.length - 31)
   switch(availabilityValue) {
     case "INSTOCK":
       availabilityValue = "IN STOCK"
@@ -125,10 +135,9 @@ const startFetchingData = async () => {
     return new Promise((resolve) => resolve())
   } catch (e) {
     console.error(e)
-    return new Promise((resolve, reject) => reject(err))
+    return new Promise((resolve, reject) => reject(e))
   }
 }
-
 
 module.exports = {
   startFetchingData, myCache
