@@ -49,6 +49,15 @@ const retry = async (functionToTry, numberOfRetries) => {
   return lastError
 }
 
+/*
+  getAvailabilityByManufacturer returns
+  {
+    manufacturerName: [{}, ...],
+    manufacturerName: [{}, ...],
+    manufacturerName: [{}, ...]
+    ...
+  }
+*/
 const getAvailabilityByManufacturer = async (manufacturerNames) => {
   let availabilityDataByManufacturer = {}
     await Promise.all(manufacturerNames.map( async (manufacturer) => {
