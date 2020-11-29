@@ -1,6 +1,5 @@
 const axios = require('axios')
 const NodeCache = require( "node-cache" )
-const socket = require('../socketio.js')
 const myCache = new NodeCache()
 
 const productCategories = ['jackets', 'shirts', 'accessories']

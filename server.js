@@ -15,7 +15,6 @@ app.get('/products', (req, res) => {
 })
 
 app.get('/*', (req, res) => {
-  console.log("hello")
     res.sendFile(__dirname + '/build/index.html')
 })
 
