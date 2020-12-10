@@ -3,6 +3,7 @@ const cors = require('cors')
 const app = express()
 const path = require('path')
 const { startFetchingData, myCache } = require('./dataService/fetchData')
+const socket = require("socket.io")
  
 app.use(cors())
  
@@ -25,8 +26,20 @@ startServer = async () => {
   server = app.listen({ port }, () => {
     console.log(`Server running on port ${port}`)
   })
+  const io = socket(server, {
+    cors: {
+      methods: ["GET", "POST"]
+    }
+  })
+  io.on("connection", (socket) => {
+    myCache.on("set", (key, value) => {
+      if (key === "products") {
+        socket.emit("data changed", { products: value })
+      }
+    })
+  })
 }
 
 startServer()
 
-module.export = server
+module.exports = server
