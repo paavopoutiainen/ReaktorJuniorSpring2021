@@ -1,6 +1,7 @@
 const axios = require('axios')
 const NodeCache = require( "node-cache" )
 const myCache = new NodeCache()
+const isEqual = require("lodash.isequal")
 
 const productCategories = ['jackets', 'shirts', 'accessories']
 
@@ -110,12 +111,10 @@ const mapAvailabilityIntoProducts = (productsDataByCategory, availabilityDataByM
 }
 
 const cacheTheData = (productsByCategoryWithAvailability) => {
-  myCache.set("products", productsByCategoryWithAvailability)
-  /*
-  for (let [key, value] of Object.entries(productsByCategoryWithAvailability)) {
-    myCache.set(key, value)
+  if (isEqual(myCache.get("products"), productsByCategoryWithAvailability)) {
+    return
   }
-  */
+  myCache.set("products", productsByCategoryWithAvailability)
 }
 
 const startFetchingData = async () => {

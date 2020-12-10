@@ -34,7 +34,7 @@ startServer = async () => {
   io.on("connection", (socket) => {
     myCache.on("set", (key, value) => {
       if (key === "products") {
-        socket.emit("data changed", { products: value })
+        io.sockets.emit("data changed", { products: value })
       }
     })
   })
